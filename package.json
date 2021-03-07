@@ -1,0 +1,24 @@
+{
+  "name": "employee-tracker",
+  "version": "1.0.0",
+  "description": "An app that tracks employees that allows the user to sort by department or manager.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/past0073/Employee-Tracker.git"
+  },
+  "author": "past0073",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/past0073/Employee-Tracker/issues"
+  },
+  "homepage": "https://github.com/past0073/Employee-Tracker#readme",
+  "dependencies": {
+    "inquirer": "^8.0.0",
+    "mysql": "^2.18.1"
+  }
+}
