@@ -1,24 +1,24 @@
 const mysql = require('mysql');
 const inquirer = require('inquirer');
-
-const connection = mysql.createConnection({
-  host: 'localhost',
-
-  // Your port; if not 3306
-  port: 3306,
-
-  // Your username
-  user: 'root',
-
-  // Your password
-  password: '',
-  database: 'employees_DB',
-});
+const connection = require('./config/connection');
+const figlet = require('figlet');
 
 connection.connect((err) => {
-  if (err) throw err;
-  runSearch();
-});
+    if (err) throw err;
+    runSearch();
+  });
+
+function displayTitle() {
+    figlet('Employee Tracker', function(err, data) {
+        if (err) {
+            console.log('Something went wrong...');
+            console.dir(err);
+            return;
+        }
+        console.log(data)
+    });
+}
+displayTitle();
 
 const runSearch = () => {
   inquirer
@@ -34,6 +34,9 @@ const runSearch = () => {
         'Remove employee',
         'Update employee role',
         'Update employee manager',
+        'View all departments',
+        'Add department',
+        'Remove department',
         'View all roles',
         'Add role',
         'Remove role',
@@ -45,14 +48,6 @@ const runSearch = () => {
           viewAll();
           break;
 
-        case 'View all employees by department':
-          viewbyDept();
-          break;
-
-        case 'View all employees by manager':
-          viewbyManager();
-          break;
-
         case 'Add employee':
           addEmployee();
           break;
@@ -62,11 +57,23 @@ const runSearch = () => {
           break;
 
         case 'Update employee role':
-        updateRole();
-        break;
+            updateRole();
+            break;
 
         case 'Update employee manager':
             updateManager();
+            break;
+        
+        case 'View all departments':
+            viewDepartments();
+            break;
+            
+        case 'Add department':
+            addDepartment();
+            break;
+
+        case 'Remove department':
+            removeDepartment();
             break;
         
         case 'View all roles':
@@ -87,6 +94,100 @@ const runSearch = () => {
       }
     });
 };
+
+runSearch();
+
+//'View all employees'
+function viewAll() {
+    const query = 'SELECT * FROM employees';
+    connection.query(
+        query, function (err, res) {
+            if (err) throw err;
+            console.table(res);
+            runSearch();
+        }
+    )
+}
+
+// 'Add employee',
+const addEmployee = () =>
+    inquirer.prompt(
+        [
+            {
+                type: 'input',
+                name: 'first_name',
+                message: "What is the employee's first name?"
+            },
+            {
+                type: 'input',
+                name: 'last_name',
+                message: "What is the employee's last name?"
+            },
+            {
+                type: 'list',
+                name: 'role',
+                message: "What is the employee's role?",
+                choices: ["Work Coordinator", "Job Coach", "Supervisor", "Manager"],
+            },
+            {
+                type: 'list',
+                name: 'manager',
+                message: "Who is the employee's manager?",
+                choices: ["Katie O", "Amy P", "Karen J", "Sami O"],
+            },
+        ]
+    ).then((res) => {
+        connection.query(
+            'INSERT INTO employee SET ?',
+            {
+                first_name: res.first_name,
+                last_name: res.last_name,
+                role: res.role,
+                manager: res.manager
+            },
+            function (err, res) {
+                if (err) throw err;
+                console.log("Employee added successfully.")
+            }
+        )
+    })
+
+// 'Remove employee',
+const removeEmployee = () => {
+    const employees = connection.query("SELECT first_name, last_name, id FROM employees");
+    let employeeArray = [];
+    for (i=0; i<employees.length; i++) {
+        employeeArray.push({
+            name: employees[i].first_name + " " + employees[i].last_name,
+            id: employees[i].id
+        })
+    }
+    inquirer
+        .prompt({
+            type: 'list',
+            name: 'remove',
+            message: 'Which employee would you like to remove?',
+            choices: employeeArray,
+        }).then((answer) => {
+            const query = 'DELETE * FROM employees WHERE ?';  
+            connection.query(
+                query, { id: answer.id }, (err, res) => {
+                    if (err) throw err;
+                    //display updated list             
+                    runSearch();
+                }
+            ) 
+        })
+            
+}
+// 'Update employee role',
+// 'Update employee manager',
+// 'View all departments',
+// 'Add department',
+// 'Remove department',
+// 'View all roles',
+// 'Add role',
+// 'Remove role',
 
 // const artistSearch = () => {
 //   inquirer
