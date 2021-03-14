@@ -330,7 +330,38 @@ function addDepartment() {
         )
     })
 }
-// 'Remove department',
+//Remove department
+function removeDepartment() {
+    let departmentArray = [];
+    connection.query(
+        "SELECT name FROM department",
+        function (err, res) {
+            console.log(res);
+            if (err) throw err;
+        for (i=0; i<res.length; i++) {
+            departmentArray.push(
+                res[i].name
+            )
+        } 
+            inquirer.prompt({
+                type: 'list',
+                name: 'removeDepartment',
+                message: "Which department would you like to remove?",
+                choices: departmentArray
+            }).then((res) => {
+                let dept = res.removeDepartment;
+                connection.query(
+                    "DELETE FROM department WHERE name = '" + dept + "'",
+                    function (err ,res) {
+                        if (err) throw err;
+                        console.log("Department removed successfully.");
+                        runSearch();
+                    }
+                )
+            })
+        }
+    )
+}
 //View all roles
 function viewRoles() {
     connection.query(
