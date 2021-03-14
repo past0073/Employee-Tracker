@@ -104,9 +104,9 @@ const runSearch = () => {
 
 //View all employees
 function viewAll() {
-    const query = 'SELECT first_name, last_name FROM employee';
     connection.query(
-        query, function (err, res) {
+        'SELECT first_name AS first, last_name AS last FROM employee',
+            function (err, res) {
             if (err) throw err;
             console.table(res);
             runSearch();
@@ -116,7 +116,7 @@ function viewAll() {
 
 //Add employee
 function addEmployee() {
-          let roleArray = [];
+    let roleArray = [];
         connection.query(
           "SELECT title, id FROM role",
             function (err, res) {  
@@ -154,38 +154,47 @@ function addEmployee() {
             function (err, res) {
                 if (err) throw err;
                 console.log("Employee added successfully.")
+                runSearch();
             }
         )
     })
 })}
-// 'Remove employee',
-// const removeEmployee = () => {
-//     const employees = connection.query("SELECT first_name, last_name, id FROM employees");
-//     let employeeArray = [];
-//     for (i=0; i<employees.length; i++) {
-//         employeeArray.push({
-//             name: employees[i].first_name + " " + employees[i].last_name,
-//             id: employees[i].id
-//         })
-//     }
-//     inquirer
-//         .prompt({
-//             type: 'list',
-//             name: 'remove',
-//             message: 'Which employee would you like to remove?',
-//             choices: employeeArray,
-//         }).then((answer) => {
-//             const query = 'DELETE * FROM employees WHERE ?';  
-//             connection.query(
-//                 query, { id: answer.id }, (err, res) => {
-//                     if (err) throw err;
-//                     //display updated list             
-//                     runSearch();
-//                 }
-//             ) 
-//         })
-            
-// }
+
+//Remove employee
+function removeEmployee() {
+    let employeeArray = [];
+    connection.query(
+        "SELECT first_name, last_name, id FROM employee",
+        function (err, res) {
+            console.log(res);
+            if (err) throw err;
+        for (i=0; i<res.length; i++) {
+            employeeArray.push({
+                name: res[i].first_name + " " + res[i].last_name, 
+                id: res[i].id
+            })
+        }
+        console.log(employeeArray);
+    inquirer
+        .prompt({
+            type: 'list',
+            name: 'remove',
+            message: 'Which employee would you like to remove?',
+            choices: employeeArray,
+        }).then((res) => {
+            let removed = res.remove.split(" ");
+            console.log(removed);
+            connection.query(
+                "DELETE FROM employee WHERE first_name = '" + removed[0] +"' AND last_name = '" + removed[1] + "'", 
+                    function (err, res) {
+                        if (err) throw err;
+                        console.log("Employee deleted successfully.")       
+                        runSearch();
+                    }
+            ) 
+        })
+    })}        
+
 // 'Update employee role',
 // 'Update employee manager',
 // 'View all departments',
