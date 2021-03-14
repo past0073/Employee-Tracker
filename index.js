@@ -312,7 +312,24 @@ function viewDepartments() {
         }
     )
 }
-// 'Add department',
+//Add department
+function addDepartment() {
+    inquirer.prompt({
+        type: 'input',
+        name: 'addDepartment',
+        message: "What department would you like to add?"
+    }).then((res) => {
+        let dept = res.addDepartment;
+        connection.query(
+            "INSERT INTO department (name) VALUES ('" + dept + "')",
+            function (err, res) {
+                if (err) throw err;
+                console.log("Department added successfully.")
+                runSearch();
+            }
+        )
+    })
+}
 // 'Remove department',
 //View all roles
 function viewRoles() {
