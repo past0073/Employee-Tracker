@@ -301,9 +301,29 @@ function updateManager() {
         )  
 })})}
 
-// 'View all departments',
+//View all departments
+function viewDepartments() {
+    connection.query(
+        'SELECT name FROM department',
+            function (err, res) {
+            if (err) throw err;
+            console.table(res);
+            runSearch();
+        }
+    )
+}
 // 'Add department',
 // 'Remove department',
-// 'View all roles',
+//View all roles
+function viewRoles() {
+    connection.query(
+        'SELECT title FROM role',
+            function (err, res) {
+            if (err) throw err;
+            console.table(res);
+            runSearch();
+        }
+    )
+}
 // 'Add role',
 // 'Remove role',
