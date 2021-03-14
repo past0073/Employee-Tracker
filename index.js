@@ -249,7 +249,7 @@ function updateRole() {
         })
 })}
 
-// 'Update employee manager',
+//Update employee manager
 function updateManager() {
     let employeeArray = [];
     let managerArray = [];
@@ -273,9 +273,34 @@ function updateManager() {
         }).then((res) => {
         let chosen = res.name.split(" ");
         connection.query(
-            "SELECT title FROM role WHERE title "
+            "SELECT title FROM role WHERE title LIKE '%Manager' OR title LIKE '%Supervisor'",
+            function (err, res) {
+                if (err) throw err;
+                for (i=0; i<res.length; i++) {
+                    managerArray.push(res[i].title);
+                }
+                inquirer.prompt({
+                    type: 'list',
+                    name: 'manager',
+                    message: "Select the employee's new manager or supervisor.",
+                    choices: managerArray
+                }).then((res) => {
+                    let first = chosen[0];
+                    let last = chosen[1];
+                    let newManager = res.manager;
+                    connection.query(
+                        "UPDATE employee SET manager_id = (SELECT id FROM role WHERE title = '" + newManager + "') WHERE first_name = '" + first + "' AND last_name = '" + last + "'",
+                        function (err, res) {
+                            if (err) throw err;
+                            console.log("Employee manager updated successfully.");
+                            runSearch();
+                        }
+                    )
+                })
+            }
         )  
-}
+})})}
+
 // 'View all departments',
 // 'Add department',
 // 'Remove department',
