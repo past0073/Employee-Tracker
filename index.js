@@ -114,15 +114,18 @@ function viewAll() {
     )
 }
 
-// 'Add employee',
-const addEmployee = () => {
-        //Push all roles into one array
-        const roles = connection.query("SELET title FROM role");
-        let roleArray = [];
-        for (i=0; i<roles.length; i++) {
-            roleArray.push(
-                roles[i].title
-            )}
+//Add employee
+function addEmployee() {
+          let roleArray = [];
+        connection.query(
+          "SELECT title, id FROM role",
+            function (err, res) {  
+                if (err) throw err;    
+            for (var i=0; i<res.length; i++) {
+                roleArray.push(
+                    res[i].title
+                )}
+                console.log(roleArray);
     inquirer.prompt(
         [
             {
@@ -143,20 +146,18 @@ const addEmployee = () => {
             },
         ]
     ).then((res) => {
+        var first_name = res.first_name;
+        var last_name = res.last_name;
+        var role = res.role;
         connection.query(
-            'INSERT INTO employee SET ?',
-            {
-                first_name: res.first_name,
-                last_name: res.last_name,
-                role: res.role,
-            },
+            "INSERT INTO employee (first_name, last_name, role_id) VALUES ('" + first_name + "', '" + last_name + "', (SELECT id FROM role WHERE title = '" + role + "'))",
             function (err, res) {
                 if (err) throw err;
                 console.log("Employee added successfully.")
             }
         )
     })
-}
+})}
 // 'Remove employee',
 // const removeEmployee = () => {
 //     const employees = connection.query("SELECT first_name, last_name, id FROM employees");
