@@ -1,9 +1,9 @@
 const mysql = require('mysql');
 const inquirer = require('inquirer');
 const connection = require('./config/connection');
-const employee = require('./models/employee');
-const role = require('./models/role');
-const department = require('./models/department');
+// const employee = require('./models/employee');
+// const role = require('./models/role');
+// const department = require('./models/department');
 const figlet = require('figlet');
 const chalk = require('chalk');
 
@@ -34,8 +34,6 @@ const runSearch = () => {
       message: 'What would you like to do?',
       choices: [
         'View all employees',
-        'View all employees by department',
-        'View all employees by manager',
         'Add employee',
         'Remove employee',
         'Update employee role',
@@ -105,7 +103,7 @@ const runSearch = () => {
 //View all employees
 function viewAll() {
     connection.query(
-        'SELECT first_name AS first, last_name AS last FROM employee',
+        'SELECT * FROM employee',
             function (err, res) {
             if (err) throw err;
             console.table(res);
@@ -125,7 +123,6 @@ function addEmployee() {
                 roleArray.push(
                     res[i].title
                 )}
-                console.log(roleArray);
     inquirer.prompt(
         [
             {
@@ -166,7 +163,6 @@ function removeEmployee() {
     connection.query(
         "SELECT first_name, last_name, id FROM employee",
         function (err, res) {
-            console.log(res);
             if (err) throw err;
         for (i=0; i<res.length; i++) {
             employeeArray.push({
@@ -174,7 +170,6 @@ function removeEmployee() {
                 id: res[i].id
             })
         }
-        console.log(employeeArray);
     inquirer
         .prompt({
             type: 'list',
@@ -202,7 +197,6 @@ function updateRole() {
     connection.query(
         "SELECT first_name, last_name, id FROM employee",
         function (err, res) {
-            console.log(res);
             if (err) throw err;
         for (i=0; i<res.length; i++) {
             employeeArray.push({
