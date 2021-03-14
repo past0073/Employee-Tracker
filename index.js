@@ -176,7 +176,6 @@ function removeEmployee() {
             choices: employeeArray
         }).then((res) => {
             let removed = res.remove.split(" ");
-            console.log(removed);
             connection.query(
                 "DELETE FROM employee WHERE first_name = '" + removed[0] +"' AND last_name = '" + removed[1] + "'", 
                     function (err, res) {
@@ -248,7 +247,6 @@ function updateManager() {
     connection.query(
         "SELECT first_name, last_name, id FROM employee",
         function (err, res) {
-            console.log(res);
             if (err) throw err;
         for (i=0; i<res.length; i++) {
             employeeArray.push({
@@ -328,7 +326,6 @@ function removeDepartment() {
     connection.query(
         "SELECT name FROM department",
         function (err, res) {
-            console.log(res);
             if (err) throw err;
         for (i=0; i<res.length; i++) {
             departmentArray.push(
@@ -413,7 +410,6 @@ function removeRole() {
     connection.query(
         "SELECT title FROM role",
         function (err, res) {
-            console.log(res);
             if (err) throw err;
         for (i=0; i<res.length; i++) {
             roleArray.push(

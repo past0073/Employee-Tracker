@@ -6,6 +6,8 @@
 
 A command line application that tracks employee roles, departments, and managers that allows the user to view data in a table format.
 
+Link to walkthrough video: https://drive.google.com/file/d/1egYNlSDaGUBlaD3IeiYD_pkIAuQq82yc/view
+
 ## Table of Contents 
 * [Installation](#installation)
 * [Usage](#usage)
