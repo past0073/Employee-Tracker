@@ -3,12 +3,13 @@ const connection = require('./config/connection');
 const figlet = require('figlet');
 const chalk = require('chalk');
 
-
+//Connection
 connection.connect((err) => {
     if (err) throw err;
     displayTitle();
   });
 
+//Displaying application title
 function displayTitle() {
     figlet('Employee Tracker', function(err, data) {
         if (err) {
@@ -22,6 +23,7 @@ function displayTitle() {
     });
 }
 
+//List of user options
 function runSearch() {
   inquirer
     .prompt({
