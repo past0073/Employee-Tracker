@@ -1,9 +1,5 @@
-const mysql = require('mysql');
 const inquirer = require('inquirer');
 const connection = require('./config/connection');
-// const employee = require('./models/employee');
-// const role = require('./models/role');
-// const department = require('./models/department');
 const figlet = require('figlet');
 const chalk = require('chalk');
 
@@ -11,7 +7,6 @@ const chalk = require('chalk');
 connection.connect((err) => {
     if (err) throw err;
     displayTitle();
-    runSearch();
   });
 
 function displayTitle() {
@@ -21,12 +16,13 @@ function displayTitle() {
             console.dir(err);
             return;
         }
+        console.log(chalk.yellowBright(data));
         console.log();
-        console.log(chalk.yellowBright(data))
+        runSearch();
     });
 }
 
-const runSearch = () => {
+function runSearch() {
   inquirer
     .prompt({
       name: 'action',
