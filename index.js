@@ -180,7 +180,7 @@ function removeEmployee() {
             type: 'list',
             name: 'remove',
             message: 'Which employee would you like to remove?',
-            choices: employeeArray,
+            choices: employeeArray
         }).then((res) => {
             let removed = res.remove.split(" ");
             console.log(removed);
@@ -195,7 +195,59 @@ function removeEmployee() {
         })
     })}        
 
-// 'Update employee role',
+//Update employee role
+function updateRole() {
+    let employeeArray = [];
+    let roleArray = [];
+    connection.query(
+        "SELECT first_name, last_name, id FROM employee",
+        function (err, res) {
+            console.log(res);
+            if (err) throw err;
+        for (i=0; i<res.length; i++) {
+            employeeArray.push({
+                name: res[i].first_name + " " + res[i].last_name, 
+                id: res[i].id
+            })
+        } 
+    inquirer
+        .prompt({
+            type: 'list',
+            name: 'name',
+            message: "Which employee's role would you like to update?",
+            choices: employeeArray
+        }).then((res) => {
+        let chosen = res.name.split(" ");  
+        connection.query(
+            "SELECT title FROM role",
+            function (err, res) {
+                if (err) throw err;
+                for (i=0; i<res.length; i++) {
+                    roleArray.push(res[i].title)
+                }
+                inquirer
+                    .prompt({
+                        type: 'list',
+                        name: 'role',
+                        message: "Select the employee's new role.",
+                        choices: roleArray
+                    }).then((res) => {
+                        let first = chosen[0];
+                        let last = chosen[1];
+                        let newRole = res.role;
+                    connection.query(
+                        "UPDATE employee SET role_id = (SELECT id FROM role WHERE title = '" + newRole + "') WHERE first_name = '" + first + "' AND last_name = '" + last + "'",
+                        function (err, res) {
+                            if (err) throw err;
+                            console.log("Employee role updated successfully.");
+                            runSearch();
+                        }
+                    )
+                    })
+            }
+        )
+        })
+})}
 // 'Update employee manager',
 // 'View all departments',
 // 'Add department',
