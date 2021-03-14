@@ -248,7 +248,34 @@ function updateRole() {
         )
         })
 })}
+
 // 'Update employee manager',
+function updateManager() {
+    let employeeArray = [];
+    let managerArray = [];
+    connection.query(
+        "SELECT first_name, last_name, id FROM employee",
+        function (err, res) {
+            console.log(res);
+            if (err) throw err;
+        for (i=0; i<res.length; i++) {
+            employeeArray.push({
+                name: res[i].first_name + " " + res[i].last_name, 
+                id: res[i].id
+            })
+        } 
+    inquirer
+        .prompt({
+            type: 'list',
+            name: 'name',
+            message: "Which employee's manager would you like to update?",
+            choices: employeeArray
+        }).then((res) => {
+        let chosen = res.name.split(" ");
+        connection.query(
+            "SELECT title FROM role WHERE title "
+        )  
+}
 // 'View all departments',
 // 'Add department',
 // 'Remove department',
