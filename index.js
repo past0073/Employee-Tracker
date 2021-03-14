@@ -1,10 +1,16 @@
 const mysql = require('mysql');
 const inquirer = require('inquirer');
 const connection = require('./config/connection');
+const employee = require('./models/employee');
+const role = require('./models/role');
+const department = require('./models/department');
 const figlet = require('figlet');
+const chalk = require('chalk');
+
 
 connection.connect((err) => {
     if (err) throw err;
+    displayTitle();
     runSearch();
   });
 
@@ -15,10 +21,10 @@ function displayTitle() {
             console.dir(err);
             return;
         }
-        console.log(data)
+        console.log();
+        console.log(chalk.yellowBright(data))
     });
 }
-displayTitle();
 
 const runSearch = () => {
   inquirer
@@ -95,7 +101,6 @@ const runSearch = () => {
     });
 };
 
-runSearch();
 
 //'View all employees'
 function viewAll() {
