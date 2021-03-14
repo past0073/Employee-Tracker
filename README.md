@@ -2,6 +2,8 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+## Descrption
+
 A command line application that tracks employee roles, departments, and managers that allows the user to view data in a table format.
 
 ## Table of Contents 
@@ -26,7 +28,7 @@ This project is licensed under the terms of the MIT license.
 If you have any questions or run into any issues with this application, please feel free to find me, past0073, on GitHub at github.com/past0073. You can also reach out to me via email at past0073@umn.edu.
 
 
-## Screenshots:
+## Screenshots
 
 ![image](https://user-images.githubusercontent.com/74335621/111079780-7a4b9a00-84c9-11eb-99b7-be45eb4f06fd.png)
 
