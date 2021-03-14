@@ -415,4 +415,33 @@ function addRole() {
         }
     )})
 })}
-// 'Remove role',
+//Remove role
+function removeRole() {
+    let roleArray = [];
+    connection.query(
+        "SELECT title FROM role",
+        function (err, res) {
+            console.log(res);
+            if (err) throw err;
+        for (i=0; i<res.length; i++) {
+            roleArray.push(
+                res[i].title
+            )
+        } 
+        inquirer.prompt({
+            type: 'list',
+            name: 'removeRole',
+            message: "Which role would you like to remove?",
+            choices: roleArray
+        }).then((res) => {
+            let role = res.removeRole;
+            connection.query(
+                "DELETE FROM role WHERE title = '" + role + "'",
+                function (err, res) {
+                    if (err) throw err;
+                    console.log("Role removed successfully.");
+                    runSearch();
+                }
+            )
+        })
+})}
