@@ -373,5 +373,46 @@ function viewRoles() {
         }
     )
 }
-// 'Add role',
+//Add role
+function addRole() {
+    let departmentArray = [];
+    connection.query(
+        "SELECT name FROM department",
+        function (err, res) {
+            if (err) throw err;
+        for (i=0; i<res.length; i++) {
+            departmentArray.push(
+                res[i].name
+            )
+        } 
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'newRole',
+            message: "What is the name of the new role?"
+        },
+        {
+            type: 'input',
+            name: 'salary',
+            message: 'What is the salary for the new role?'
+        },
+        {
+            type: 'list',
+            name: 'department',
+            message: 'Under which department does this role operate?',
+            choices: departmentArray
+        }
+    ]).then((res) => {
+        let newRole = res.newRole;
+        let salary = res.salary;
+        let dept = res.department;
+        connection.query(
+        "INSERT INTO role (title, salary, department_id) VALUES ('" + newRole + "', '" + salary + "', (SELECT id FROM department WHERE name = '" + dept + "'))",
+        function (err, res) {
+            if (err) throw err;
+            console.log("Role added successfully.");
+            runSearch();
+        }
+    )})
+})}
 // 'Remove role',
